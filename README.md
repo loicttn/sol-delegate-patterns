@@ -4,7 +4,9 @@ _Disclaimer: all code here is incomplete and probably unsafe, do not use it._
 
 This repository highlights different delegate calls patterns in Solidity for education purposes.
 
-## 0. What is delegatecall?
+# Introduction - Delegatecall and Storage
+
+### What is delegatecall?
 
 EVM exposes and opcode `delegatecall` which allows to execute code from another contract in the context of the caller contract. This means that the code executed by `delegatecall` has access to the caller's storage, balance, etc.
 
@@ -31,7 +33,7 @@ In the example above, calling the `callIncrement` function of the `caller` contr
 
 This allows usecases like proxies and upgradability patterns that we will explore below.
 
-## 0.5 - Storage layout
+### Storage layout
 
 In order to understand the patterns below, it is important to understand how Solidity stores variables in storage.
 
@@ -93,22 +95,40 @@ SLOT #2     caller.c = 42    implem.b
 
 To prevent this, we use a storage layout that is compatible between the two contracts by encoding variables name to slot numbers. This is done in the [Storage Library](./contracts/Storage.sol).
 
-## 1. Proxy
+# Proxy pattern
+
+A proxy contract uses `delegatecall` to execute the code of another contract in the storage context of the proxy contract.
+
+```
+                +-----------------+ .           +-----------------+
+                |                 |             | TargetedImplem  |
+                |                 |             |                 |
+      calls     | Proxy           |  delegate   |                 |
+   -------->    |                 | ----------> |                 |
+                |  +-----------+  |   calls     |  +-----------+  |
+                |  |  Storage  |  |             |  |  Logic    |  |
+                |  +-----------+  |             |  +-----------+  |
+                +-----------------+ .           +-----------------+
+```
+
+### Proxy
 
 The first pattern we will explore is the proxy pattern. The proxy pattern allows to have a single contract that can execute the code of another contract.
 
 => See [Proxy.sol](./contracts/Proxy.sol) for the implementation.
 
-## 2. UpgradeableProxy
+### UpgradeableProxy
 
 The upgradeable proxy pattern is an extension of the proxy pattern that allows to upgrade the implementation address of the proxy. This is managed by a dedicated `admin` address.
 
 => See [UpgradeableProxy.sol](./contracts/UpgradeableProxy.sol) for the implementation.
 
-## 3. TransparentUpgradeableProxy
+### TransparentUpgradeableProxy
 
 The issue with the UpgradeableProxy is that if the admin functions are also declared on the implementation contract (like the `upgradeTo` function). This creates ambiguity on which contract should be called when calling these functions.
 
 To solve this, we can use the TransparentUpgradeableProxy pattern. This pattern only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
 
 => See [TransparentUpgradeableProxy.sol](./contracts/TransparentUpgradeableProxy.sol) for the implementation.
+
+# Beacon pattern

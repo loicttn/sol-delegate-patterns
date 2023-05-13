@@ -27,6 +27,11 @@ import "../libs/Storage.sol";
                 |  |  ...      |  |
                 |  +-----------+  |  
                 +-----------------+            
+
+    This pattern is very useful to make contracts upgradable. Admin can
+    deploy a TargetedImplemV2 with new features/functions and then change
+    the implementation address in the proxy's storage. The proxy will then
+    delegate calls to the new V2 implementation contract.
  */
 contract UpgradeableProxy {
     // eip1967 defines a standard for which slots to use for proxy config
