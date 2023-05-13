@@ -6,7 +6,7 @@ This repository highlights different delegate calls patterns in Solidity for edu
 
 # Introduction - Delegatecall and Storage
 
-### What is delegatecall?
+## What is delegatecall?
 
 EVM exposes and opcode `delegatecall` which allows to execute code from another contract in the context of the caller contract. This means that the code executed by `delegatecall` has access to the caller's storage, balance, etc.
 
@@ -33,7 +33,7 @@ In the example above, calling the `callIncrement` function of the `caller` contr
 
 This allows usecases like proxies and upgradability patterns that we will explore below.
 
-### Storage layout
+## Storage layout
 
 In order to understand the patterns below, it is important to understand how Solidity stores variables in storage.
 
@@ -111,19 +111,19 @@ A proxy contract uses `delegatecall` to execute the code of another contract in 
                 +-----------------+             +-----------------+
 ```
 
-### Proxy
+## Proxy
 
 The first pattern we will explore is the proxy pattern. The proxy pattern allows to have a single contract that can execute the code of another contract.
 
 👉 See [Proxy.sol](./contracts/Proxy.sol) for the implementation.
 
-### UpgradeableProxy
+## UpgradeableProxy - UUPS
 
 The upgradeable proxy pattern is an extension of the proxy pattern that allows to upgrade the implementation address of the proxy. This is managed by a dedicated `admin` address.
 
 👉 See [UpgradeableProxy.sol](./contracts/UpgradeableProxy.sol) for the implementation.
 
-### TransparentUpgradeableProxy
+## TransparentUpgradeableProxy
 
 The issue with the UpgradeableProxy is that if the admin functions are also declared on the implementation contract (like the `upgradeTo` function). This creates ambiguity on which contract should be called when calling these functions.
 
@@ -132,3 +132,53 @@ To solve this, we can use the TransparentUpgradeableProxy pattern. This pattern 
 👉 See [TransparentUpgradeableProxy.sol](./contracts/TransparentUpgradeableProxy.sol) for the implementation.
 
 # Beacon pattern
+
+The beacon pattern refers to having multiple proxy contracts refering to a single "beacon contract" to fetch their implementation address.
+
+```
+                +-----------------+             +--------------------+
+                | Beacon Proxy 1  |             | Beacon             |
+                |                 |             |                    |
+    1. calls    |                 |  2. fetch   | |implementation|   |
+   -------->    |                 | ----------> | |   address    |   |
+                |  +-----------+  |   implem    +--------------------+
+                |  |  Storage  |  |   address
+                |  +-----------+  |
+                |                 |             +------------------+
+                |                 | 3. delegate | TargetedImplem 1 |
+                |                 | ----------> |                  |
+                |                 |    calls    |                  |
+                |                 |             | +--------------+ |
+                |                 |             | |  Logic       | |
+                |                 |             | +--------------+ |
+                |                 |             |                  |
+                +-----------------+             +------------------+
+```
+
+## BeaconProxy
+
+The BeaconProxy contract is a proxy contract that fetches its implementation address from a beacon contract.
+
+👉 See [BeaconProxy.sol](./contracts/BeaconProxy.sol) for the implementation.
+
+### UpgradeableBeaconProxy
+
+The UpgradeableBeaconProxy contract is an extension of the BeaconProxy contract that allows to upgrade the beacon address of the proxy. This is managed by a dedicated `admin` address.
+
+👉 See [UpgradeableBeaconProxy.sol](./contracts/UpgradeableBeaconProxy.sol) for the implementation.
+
+### TransparentUpgradeableBeaconProxy
+
+The TransparentUpgradeableBeaconProxy contract is an extension of the UpgradeableBeaconProxy contract that only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
+
+## Beacon
+
+The Beacon contract is a contract that stores the implementation address of a contract. It is used by the BeaconProxy contract to fetch the implementation address.
+
+👉 See [Beacon.sol](./contracts/Beacon.sol) for the implementation.
+
+### UpgradeableBeacon
+
+The UpgradeableBeacon contract is an extension of the Beacon contract that allows to upgrade the implementation address of the beacon by a registered `admin`. This is particularly interesting as it allows to upgrade the implementation address of all the proxies that are using this beacon.
+
+👉 See [UpgradeableBeacon.sol](./contracts/UpgradeableBeacon.sol) for the implementation.
