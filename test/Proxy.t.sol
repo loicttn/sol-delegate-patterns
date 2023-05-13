@@ -19,6 +19,21 @@ contract PTest is Test {
         assertEq(wproxy.number(), 42, "initial number");
     }
 
+    function testDoubleInitFail() public {
+        TargetedImplem target = new TargetedImplem();
+        Proxy proxy = new Proxy(address(target));
+        TargetedImplem wproxy = TargetedImplem(address(proxy));
+        wproxy.initialize();
+
+        // test initial state
+        assertEq(proxy.getImplem(), address(target), "implementation address");
+        assertEq(wproxy.number(), 42, "initial number");
+
+        // test double init
+        vm.expectRevert(bytes("already initialized"));
+        wproxy.initialize();
+    }
+
     function testIncrement() public {
         TargetedImplem target = new TargetedImplem();
         Proxy proxy = new Proxy(address(target));

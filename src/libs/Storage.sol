@@ -86,4 +86,26 @@ library Storage {
             sstore(slot, value)
         }
     }
+
+    ////////////////////////
+    // BOOL
+    ////////////////////////
+
+    struct Bool {
+        bool v;
+    }
+
+    function getBool(
+        bytes32 slot
+    ) internal pure returns (Bool storage pointer) {
+        assembly {
+            pointer.slot := slot
+        }
+    }
+
+    function setBool(bytes32 slot, bool value) internal {
+        assembly {
+            sstore(slot, value)
+        }
+    }
 }

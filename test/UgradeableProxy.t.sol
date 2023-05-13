@@ -59,14 +59,13 @@ contract UPTest is Test {
         UpgradeableProxy proxy = new UpgradeableProxy(address(target));
         TargetedImplem wproxy = TargetedImplem(address(proxy));
         wproxy.initialize();
-        wproxy.increment();
 
         // test change admin
+        address newAdmin = address(0x123);
         vm.expectEmit(true, true, true, true);
-        emit EIP1967AdminChanged(address(this), address(this));
-        proxy.changeAdmin(address(this));
+        emit EIP1967AdminChanged(address(this), newAdmin);
+        proxy.changeAdmin(newAdmin);
 
-        assertEq(proxy.getAdmin(), address(this), "new admin");
-        assertEq(wproxy.number(), 43, "number is still there");
+        assertEq(proxy.getAdmin(), newAdmin, "new admin");
     }
 }

@@ -104,3 +104,11 @@ The first pattern we will explore is the proxy pattern. The proxy pattern allows
 The upgradeable proxy pattern is an extension of the proxy pattern that allows to upgrade the implementation address of the proxy. This is managed by a dedicated `admin` address.
 
 => See [UpgradeableProxy.sol](./contracts/UpgradeableProxy.sol) for the implementation.
+
+## 3. TransparentUpgradeableProxy
+
+The issue with the UpgradeableProxy is that if the admin functions are also declared on the implementation contract (like the `upgradeTo` function). This creates ambiguity on which contract should be called when calling these functions.
+
+To solve this, we can use the TransparentUpgradeableProxy pattern. This pattern only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
+
+=> See [TransparentUpgradeableProxy.sol](./contracts/TransparentUpgradeableProxy.sol) for the implementation.
