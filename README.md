@@ -93,7 +93,7 @@ SLOT #1     caller.b = 0     implem.c
 SLOT #2     caller.c = 42    implem.b
 ```
 
-To prevent this, we use a storage layout that is compatible between the two contracts by encoding variables name to slot numbers. This is done in the [Storage Library](./contracts/Storage.sol).
+To prevent this, we use a storage layout that is compatible between the two contracts by encoding variables name to slot numbers. This is done in the [Storage Library](/src/libs/Storage.sol).
 
 # Proxy pattern
 
@@ -115,13 +115,13 @@ A proxy contract uses `delegatecall` to execute the code of another contract in 
 
 The first pattern we will explore is the proxy pattern. The proxy pattern allows to have a single contract that can execute the code of another contract.
 
-👉 See [Proxy.sol](./contracts/Proxy.sol) for the implementation.
+👉 See [Proxy.sol](/src/patterns/Proxy.sol) for the implementation.
 
 ## UpgradeableProxy - UUPS
 
 The upgradeable proxy pattern is an extension of the proxy pattern that allows to upgrade the implementation address of the proxy. This is managed by a dedicated `admin` address.
 
-👉 See [UpgradeableProxy.sol](./contracts/UpgradeableProxy.sol) for the implementation.
+👉 See [UpgradeableProxy.sol](/src/patterns/UpgradeableProxy.sol) for the implementation.
 
 ## TransparentUpgradeableProxy
 
@@ -129,7 +129,7 @@ The issue with the UpgradeableProxy is that if the admin functions are also decl
 
 To solve this, we can use the TransparentUpgradeableProxy pattern. This pattern only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
 
-👉 See [TransparentUpgradeableProxy.sol](./contracts/TransparentUpgradeableProxy.sol) for the implementation.
+👉 See [TransparentUpgradeableProxy.sol](/src/patterns/TransparentUpgradeableProxy.sol) for the implementation.
 
 # Beacon pattern
 
@@ -159,26 +159,28 @@ The beacon pattern refers to having multiple proxy contracts refering to a singl
 
 The BeaconProxy contract is a proxy contract that fetches its implementation address from a beacon contract.
 
-👉 See [BeaconProxy.sol](./contracts/BeaconProxy.sol) for the implementation.
+👉 See [BeaconProxy.sol](/src/patterns/BeaconProxy.sol) for the implementation.
 
 ### UpgradeableBeaconProxy
 
 The UpgradeableBeaconProxy contract is an extension of the BeaconProxy contract that allows to upgrade the beacon address of the proxy. This is managed by a dedicated `admin` address.
 
-👉 See [UpgradeableBeaconProxy.sol](./contracts/UpgradeableBeaconProxy.sol) for the implementation.
+👉 See [UpgradeableBeaconProxy.sol](/src/patterns/UpgradeableBeaconProxy.sol) for the implementation.
 
 ### TransparentUpgradeableBeaconProxy
 
 The TransparentUpgradeableBeaconProxy contract is an extension of the UpgradeableBeaconProxy contract that only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
 
+👉 Todo
+
 ## Beacon
 
 The Beacon contract is a contract that stores the implementation address of a contract. It is used by the BeaconProxy contract to fetch the implementation address.
 
-👉 See [Beacon.sol](./contracts/Beacon.sol) for the implementation.
+👉 See [Beacon.sol](/src/Beacon.sol) for the implementation.
 
 ### UpgradeableBeacon
 
 The UpgradeableBeacon contract is an extension of the Beacon contract that allows to upgrade the implementation address of the beacon by a registered `admin`. This is particularly interesting as it allows to upgrade the implementation address of all the proxies that are using this beacon.
 
-👉 See [UpgradeableBeacon.sol](./contracts/UpgradeableBeacon.sol) for the implementation.
+👉 See [UpgradeableBeacon.sol](/src/UpgradeableBeacon.sol) for the implementation.
