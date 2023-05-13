@@ -123,7 +123,7 @@ The upgradeable proxy pattern is an extension of the proxy pattern that allows t
 
 👉 See [UpgradeableProxy.sol](/src/patterns/UpgradeableProxy.sol) for the implementation.
 
-## TransparentUpgradeableProxy
+## TransparentUpgradeableProxy - TUP
 
 The issue with the UpgradeableProxy is that if the admin functions are also declared on the implementation contract (like the `upgradeTo` function). This creates ambiguity on which contract should be called when calling these functions.
 
@@ -167,7 +167,7 @@ The UpgradeableBeaconProxy contract is an extension of the BeaconProxy contract 
 
 👉 See [UpgradeableBeaconProxy.sol](/src/patterns/UpgradeableBeaconProxy.sol) for the implementation.
 
-### TransparentUpgradeableBeaconProxy - TUP
+### TransparentUpgradeableBeaconProxy
 
 The TransparentUpgradeableBeaconProxy contract is an extension of the UpgradeableBeaconProxy contract that only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
 
