@@ -100,7 +100,7 @@ To prevent this, we use a storage layout that is compatible between the two cont
 A proxy contract uses `delegatecall` to execute the code of another contract in the storage context of the proxy contract.
 
 ```
-                +-----------------+ .           +-----------------+
+                +-----------------+             +-----------------+
                 |                 |             | TargetedImplem  |
                 |                 |             |                 |
       calls     | Proxy           |  delegate   |                 |
@@ -108,7 +108,7 @@ A proxy contract uses `delegatecall` to execute the code of another contract in 
                 |  +-----------+  |   calls     |  +-----------+  |
                 |  |  Storage  |  |             |  |  Logic    |  |
                 |  +-----------+  |             |  +-----------+  |
-                +-----------------+ .           +-----------------+
+                +-----------------+             +-----------------+
 ```
 
 ### Proxy
