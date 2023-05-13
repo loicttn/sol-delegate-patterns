@@ -93,6 +93,7 @@ contract TransparentUpgradeableProxy {
                 return(add(ret, 0x20), mload(ret))
             }
         }
+        // Fallback to implementation
         assembly {
             // Copy msg.data. We take full control of memory in this inline assembly
             // block because it will not return to Solidity code. We overwrite the

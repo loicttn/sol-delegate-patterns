@@ -83,6 +83,7 @@ contract UpgradeableProxy {
 
     function _fallback() internal {
         address _impl = Storage.getAddress(IMPLEM_SLOT).v;
+        // Fallback to implementation
         // copied from EIP1967
         assembly {
             // Copy msg.data. We take full control of memory in this inline assembly
