@@ -101,9 +101,9 @@ A proxy contract uses `delegatecall` to execute the code of another contract in 
 
 ```
                 +-----------------+             +-----------------+
-                |                 |             | TargetedImplem  |
+                | Proxy           |             | TargetedImplem  |
                 |                 |             |                 |
-      calls     | Proxy           |  delegate   |                 |
+      calls     |                 |  delegate   |                 |
    -------->    |                 | ----------> |                 |
                 |  +-----------+  |   calls     |  +-----------+  |
                 |  |  Storage  |  |             |  |  Logic    |  |
