@@ -167,7 +167,7 @@ The UpgradeableBeaconProxy contract is an extension of the BeaconProxy contract 
 
 👉 See [UpgradeableBeaconProxy.sol](/src/patterns/UpgradeableBeaconProxy.sol) for the implementation.
 
-### TransparentUpgradeableBeaconProxy
+### TransparentUpgradeableBeaconProxy - TUP
 
 The TransparentUpgradeableBeaconProxy contract is an extension of the UpgradeableBeaconProxy contract that only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
 
