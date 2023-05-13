@@ -2,32 +2,33 @@ pragma solidity ^0.8.13;
 
 import "../libs/Storage.sol";
 
-/** THIS IS A STUPID, INCOMPLETE AND MOST PROBABLY UNSAFE IMPLEM OF TUP, DO NOT USE.
+/** THIS IS A STUPID, INCOMPLETE AND MOST PROBABLY UNSAFE IMPLEM OF UP, DO NOT USE.
 
 
-    Transparent Upgradeable Proxy (TUP) pattern is used to proxy calls to an
+    Upgradeable Proxy (UP) pattern is used to proxy calls to an
     implementation contract. The implementation contract is stored in the 
     proxy's storage. The proxy's storage org is defined by EIP1967.
 
-    TUP also has some admin utilities to change the implementation contract
+    UP introduces some admin utilities to change the implementation contract
     and the admin address.
-
-    In the spec, TUP has special admin selectors that can be specified in msg.sig
-    during a fallback call. These selectors are not implemented here.
 
 
                 +-----------------+ .           +-----------------+
-                | Transparent     |             | TargetedImplem  |
+                |                 |             | TargetedImplem  |
                 | Upgradeable     |             |                 |
       calls     | Proxy           |  delegate   |                 |
    -------->    |                 | ----------> |                 |
                 |  +-----------+  |   calls     |  +-----------+  |
-                |  |  Storage  |  |             |  |  Logic    |  |
-                |  +-----------+  |             |  +-----------+  |
-                +-----------------+ .           +-----------------+
+                |  |  Storage  |  |     to      |  |  Logic    |  |
+                |  |           |  |   implem    |  |           |  |
+                |  |  implem   |  |             |  +-----------+  |
+                |  |  ...      |  |             +-----------------+
+                |  |  admin    |  |
+                |  |  ...      |  |
+                |  +-----------+  |  
+                +-----------------+            
  */
-
-contract TransparentUpgradeableProxy {
+contract UpgradeableProxy {
     // eip1967 defines a standard for which slots to use for proxy config
     bytes32 private constant IMPLEM_SLOT =
         bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1);
@@ -48,6 +49,12 @@ contract TransparentUpgradeableProxy {
     }
 
     function upgradeTo(address _implementation) external admin {
+        // For safety, we require that the new implementation is a contract
+        uint256 size;
+        assembly {
+            size := extcodesize(_implementation)
+        }
+        require(size > 0, "not a contract");
         Storage.setAddress(IMPLEM_SLOT, _implementation);
         emit EIP1967Upgraded(_implementation);
     }

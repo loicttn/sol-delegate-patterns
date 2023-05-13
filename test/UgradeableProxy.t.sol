@@ -3,9 +3,9 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
 import "../src/TargetedImplem.sol";
-import "../src/patterns/TransparentUpgradableProxy.sol";
+import "../src/patterns/UpgradeableProxy.sol";
 
-contract TUPTest is Test {
+contract UPTest is Test {
     bytes32 constant VALUE_SLOT = bytes32(uint256(keccak256("number")) - 1);
 
     event EIP1967Upgraded(address indexed implementation);
@@ -13,9 +13,7 @@ contract TUPTest is Test {
 
     function testInit() public {
         TargetedImplem target = new TargetedImplem();
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(target)
-        );
+        UpgradeableProxy proxy = new UpgradeableProxy(address(target));
         TargetedImplem wproxy = TargetedImplem(address(proxy));
         wproxy.initialize();
 
@@ -27,9 +25,7 @@ contract TUPTest is Test {
 
     function testIncrement() public {
         TargetedImplem target = new TargetedImplem();
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(target)
-        );
+        UpgradeableProxy proxy = new UpgradeableProxy(address(target));
         TargetedImplem wproxy = TargetedImplem(address(proxy));
         wproxy.initialize();
 
@@ -41,9 +37,7 @@ contract TUPTest is Test {
 
     function testChangeImplementation() public {
         TargetedImplem target = new TargetedImplem();
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(target)
-        );
+        UpgradeableProxy proxy = new UpgradeableProxy(address(target));
         TargetedImplem wproxy = TargetedImplem(address(proxy));
         wproxy.initialize();
         wproxy.increment();
@@ -62,9 +56,7 @@ contract TUPTest is Test {
 
     function testChangeAdmin() public {
         TargetedImplem target = new TargetedImplem();
-        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
-            address(target)
-        );
+        UpgradeableProxy proxy = new UpgradeableProxy(address(target));
         TargetedImplem wproxy = TargetedImplem(address(proxy));
         wproxy.initialize();
         wproxy.increment();
