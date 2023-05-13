@@ -115,13 +115,13 @@ A proxy contract uses `delegatecall` to execute the code of another contract in 
 
 The first pattern we will explore is the proxy pattern. The proxy pattern allows to have a single contract that can execute the code of another contract.
 
-=> See [Proxy.sol](./contracts/Proxy.sol) for the implementation.
+👉 See [Proxy.sol](./contracts/Proxy.sol) for the implementation.
 
 ### UpgradeableProxy
 
 The upgradeable proxy pattern is an extension of the proxy pattern that allows to upgrade the implementation address of the proxy. This is managed by a dedicated `admin` address.
 
-=> See [UpgradeableProxy.sol](./contracts/UpgradeableProxy.sol) for the implementation.
+👉 See [UpgradeableProxy.sol](./contracts/UpgradeableProxy.sol) for the implementation.
 
 ### TransparentUpgradeableProxy
 
@@ -129,6 +129,6 @@ The issue with the UpgradeableProxy is that if the admin functions are also decl
 
 To solve this, we can use the TransparentUpgradeableProxy pattern. This pattern only forwards calls to the implementation contract if msg.sender is not the registered admin address. This way, the admin functions are always called on the proxy contract.
 
-=> See [TransparentUpgradeableProxy.sol](./contracts/TransparentUpgradeableProxy.sol) for the implementation.
+👉 See [TransparentUpgradeableProxy.sol](./contracts/TransparentUpgradeableProxy.sol) for the implementation.
 
 # Beacon pattern
