@@ -184,3 +184,32 @@ The Beacon contract is a contract that stores the implementation address of a co
 The UpgradeableBeacon contract is an extension of the Beacon contract that allows to upgrade the implementation address of the beacon by a registered `admin`. This is particularly interesting as it allows to upgrade the implementation address of all the proxies that are using this beacon.
 
 👉 See [UpgradeableBeacon.sol](/src/UpgradeableBeacon.sol) for the implementation.
+
+# Diamond pattern
+
+The diamon pattern is similar to a proxy pattern but using multiple implementation contracts. Its goal is to overcome the contract code size limit, by having an unlimited number of implementation contracts, called diamonds facets. Each diamond facet is responsible for a specific set of functions which are registered inside the Diamond so that the user can be redirected properly. The Diamond contract stores the data for each facet, which can be shared between them or not.
+
+The specification of diamond pattern is defined in the [EIP-2535](https://eips.ethereum.org/EIPS/eip-2535), as it does not specify the storage layout, we will use the same [Storage.sol](/src/libs/Storage.sol) layout.
+
+```
+                +-----------------+             +-----------------+
+                | Diamond         |             | Facet 1         |
+                |                 |             |  +-----------+  |
+      calls     |                 |  delegate   |  |  Logic    |  |
+   -------->    |                 | ----------> |  +-----------+  |
+                |  +-----------+  |   calls     +-----------------+
+                |  |  Storage1 |  |
+                |  +-----------+  |             +-----------------+
+                |                 |             | Facet 2         |
+                |  +-----------+  |  delegate   |  +-----------+  |
+                |  |  Storage2 |  | ----------> |  |  Logic    |  |
+                |  +-----------+  |   calls     |  +-----------+  |
+                |                 |             +-----------------+
+                |  +-----------+  |
+                |  |  Storage3 |  |   delegate  +-----------------+
+                |  +-----------+  | ----------> | Facet 3         |
+                +-----------------+    calls    |  +-----------+  |
+                                                |  |  Logic    |  |
+                                                |  +-----------+  |
+                                                +-----------------+
+```
