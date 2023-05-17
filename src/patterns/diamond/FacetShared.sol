@@ -14,7 +14,7 @@ contract DiamondFacetShared {
     }
 
     // this must be called only once
-    function initialize() public onlyOnce {
+    function initialize_shared() public onlyOnce {
         Storage.setUint256(
             bytes32(uint256(keccak256("shared.number")) - 1),
             42

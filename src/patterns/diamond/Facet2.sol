@@ -14,7 +14,7 @@ contract DiamondFacet2 {
     }
 
     // this must be called only once
-    function initialize() public onlyOnce {
+    function initialize_2() public onlyOnce {
         Storage.setUint256(
             bytes32(uint256(keccak256("facet2.number")) - 1),
             42

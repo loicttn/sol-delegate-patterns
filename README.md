@@ -193,7 +193,7 @@ The specification of diamond pattern is defined in the [EIP-2535](https://eips.e
 
 ```
                 +-----------------+             +-----------------+
-                | Diamond         |             | Facet 1         |
+                | Diamond contract|             | Facet 1         |
                 |                 |             |  +-----------+  |
       calls     |                 |  delegate   |  |  Logic    |  |
    -------->    |                 | ----------> |  +-----------+  |
@@ -213,3 +213,17 @@ The specification of diamond pattern is defined in the [EIP-2535](https://eips.e
                                                 |  +-----------+  |
                                                 +-----------------+
 ```
+
+## DiamondUpgradeableProxy
+
+The Diamond Proxy contract follows the UpgradeableProxy pattern, managing multiple implementations, called facets and managed by the registered `admin` address through DiamondCut operations: `addFacet`, `removeFacet`, `replaceFacet`.
+
+👉 See [DiamondUpgradeableProxy.sol](/src/patterns/diamond/DiamondUpgradeableProxy.sol) for the implementation.
+
+## Facets
+
+Facets are just regular implementation, here highlighting dedicated and shared facet storages patterns:
+
+- Dedicated facet storage: [Facet1.sol](/src/patterns/diamond/Facet1.sol)
+- Dedicated facet storage: [Facet2.sol](/src/patterns/diamond/Facet2.sol)
+- Shared facet storage: [Facet3.sol](/src/patterns/diamond/FacetShared.sol)
