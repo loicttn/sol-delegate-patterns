@@ -193,7 +193,7 @@ The specification of diamond pattern is defined in the [EIP-2535](https://eips.e
 
 ```
                 +-----------------+             +-----------------+
-                | Diamond contract|             | Facet 1         |
+                | Diamond Proxy   |             | Facet 1         |
                 |                 |             |  +-----------+  |
       calls     |                 |  delegate   |  |  Logic    |  |
    -------->    |                 | ----------> |  +-----------+  |
