@@ -1,6 +1,6 @@
 # Solidity Delegate Call Patterns
 
-_Disclaimer: all code here is incomplete and probably unsafe, do not use it._
+_Disclaimer: all code here is incomplete and probably unsafe, do not use it. Prefer using OpenZeppelin audited libraries instead._
 
 This repository highlights different delegate calls patterns in Solidity for education purposes.
 
